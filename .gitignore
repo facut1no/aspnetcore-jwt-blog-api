@@ -1,0 +1,59 @@
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+.vscode/
+
+# Rider
+.idea/
+
+# NuGet
+*.nupkg
+# The packages folder can be ignored because of PackageReference
+# but uncomment if you restore to packages folder
+# packages/
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# DotCover
+*.dotCover
+
+# Runtime directories
+runtime/
+appsettings.*.json
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Certificate files
+*.pfx
+*.pem
+*.key
+
+# EF Core Migrations
+**/Migrations/*[!.cs]
+**/Migrations/*.Designer.cs
+**/Migrations/*.Snapshot.cs
+
+# publish output
+PublishProfiles/
+*.Publish.xml
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
