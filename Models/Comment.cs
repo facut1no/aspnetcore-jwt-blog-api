@@ -12,5 +12,6 @@ public sealed class Comment
   public Post Post { get; set; } = null!;
   public Guid UserId { get; set; }
   public User User { get; set; } = null!;
-
+  public ICollection<Comment> Replies { get; set; } = new List<Comment>();
+  public ICollection<CommentLike> Likes { get; set; } = new List<CommentLike>();
 }
