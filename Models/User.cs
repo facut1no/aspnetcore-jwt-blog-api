@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace PostCommentAPI.Models;
 
 public sealed class User
@@ -8,6 +10,8 @@ public sealed class User
   public string PasswordHash { get; set; } = string.Empty;
   public string FirstName { get; set; } = string.Empty;
   public string LastName { get; set; } = string.Empty;
+  [NotMapped]
+  public string FullName { get; set; } = string.Empty;
   public string? ProfileImageUrl { get; set; } = null!;
   public bool IsDeleted { get; set; }
   public bool IsActive { get; set; }
