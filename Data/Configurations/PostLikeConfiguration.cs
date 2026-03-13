@@ -26,5 +26,8 @@ public class PostLikeConfiguration : IEntityTypeConfiguration<PostLike>
 
     builder.HasIndex(pl => pl.PostId);
     builder.HasIndex(pl => pl.UserId);
+
+    builder.HasQueryFilter(pl => !pl.User.IsDeleted);
+    builder.HasQueryFilter(pl => !pl.Post.IsDeleted);
   }
 }

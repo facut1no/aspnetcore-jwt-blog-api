@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PostCommentAPI.Auth;
 using PostCommentAPI.Data;
+using PostCommentAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +12,12 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<IAuhtService, AuhtService>();
+builder.Services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSqlConection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection"));
 });
 
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();

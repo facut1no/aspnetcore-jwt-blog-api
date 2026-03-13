@@ -23,5 +23,9 @@ public class CommentLikeConfiguration : IEntityTypeConfiguration<CommentLike>
       .WithMany(c => c.Likes)
       .HasForeignKey(cl => cl.CommentId)
       .OnDelete(DeleteBehavior.Cascade);
+
+    builder.HasQueryFilter(cl => !cl.User.IsDeleted);
+    builder.HasQueryFilter(cl => !cl.Comment.IsDeleted);
+
   }
 }

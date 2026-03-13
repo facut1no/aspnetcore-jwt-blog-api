@@ -47,5 +47,7 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
       .WithOne(l => l.Post)
       .HasForeignKey(l => l.PostId)
       .OnDelete(DeleteBehavior.Cascade);
+
+    builder.HasQueryFilter(p => !p.User.IsDeleted);
   }
 }

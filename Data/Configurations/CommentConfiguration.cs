@@ -18,6 +18,8 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
       .WithMany(u => u.Comments)
       .HasForeignKey(c => c.UserId);
 
+    builder.Property(c => c.IsDeleted).HasDefaultValue(false);
+
     builder.HasOne(c => c.Post)
       .WithMany(p => p.Comments)
       .HasForeignKey(c => c.PostId);
@@ -31,5 +33,8 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
       .WithOne(cl => cl.Comment)
       .HasForeignKey(cl => cl.CommentId)
       .OnDelete(DeleteBehavior.Cascade);
+
+    builder.HasQueryFilter(c => !c.User.IsDeleted);
+    builder.HasQueryFilter(c => !c.Post.IsDeleted);
   }
 }
