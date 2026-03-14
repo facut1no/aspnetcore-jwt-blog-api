@@ -41,7 +41,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     builder.HasIndex(u => u.Username).IsUnique();
     builder.HasIndex(u => u.Email).IsUnique();
 
-    builder.Property(u => u.DeletedAt)
+    builder.Property(u => u.DeletedTimeUtc)
       .HasDefaultValueSql("NULL");
 
     builder.Property(u => u.CreatedAt)

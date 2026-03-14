@@ -1,6 +1,7 @@
 using PostCommentAPI.Models;
+using PostCommentAPI.Repositories;
 
-public interface IUserRepository
+public interface IUserRepository : IRepository<User>
 {
   Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken);
 
@@ -9,8 +10,4 @@ public interface IUserRepository
   Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken);
 
   Task<bool> ExistsByUsernameAsync(string username, CancellationToken cancellationToken);
-
-  Task AddAsync(User user, CancellationToken cancellationToken);
-
-  Task SaveChangesAsync(CancellationToken cancellationToken);
 }

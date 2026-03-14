@@ -34,6 +34,7 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
       .HasForeignKey(cl => cl.CommentId)
       .OnDelete(DeleteBehavior.Cascade);
 
+    builder.HasQueryFilter(c => !c.IsDeleted);
     builder.HasQueryFilter(c => !c.User.IsDeleted);
     builder.HasQueryFilter(c => !c.Post.IsDeleted);
   }
