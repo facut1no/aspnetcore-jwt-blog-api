@@ -1,6 +1,6 @@
 namespace PostCommentAPI.Models;
 
-public sealed class CommentLike
+public sealed class CommentLike : BaseModel
 {
   public DateTime CreatedAt { get; set; }
   public Guid UserId { get; set; }

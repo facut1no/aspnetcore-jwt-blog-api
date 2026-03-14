@@ -2,13 +2,12 @@ using System.Xml;
 
 namespace PostCommentAPI.Models;
 
-public sealed class Post
+public sealed class Post : BaseModel
 {
   public Guid Id { get; set; }
   public string Title { get; set; } = string.Empty;
   public string Content { get; set; } = string.Empty;
   public string ImageUrl { get; set; } = string.Empty;
-  public bool IsDeleted { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
   public Guid UserId { get; set; }

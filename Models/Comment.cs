@@ -1,13 +1,11 @@
 namespace PostCommentAPI.Models;
 
-public sealed class Comment
+public sealed class Comment : BaseModel
 {
   public Guid Id { get; set; }
   public string Content { get; set; } = string.Empty;
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
-  public DateTime DeletedAt { get; set; }
-  public bool IsDeleted { get; set; }
   public Guid? ParentCommentId { get; set; }
   public Comment? ParentComment { get; set; }
   public Guid PostId { get; set; }
