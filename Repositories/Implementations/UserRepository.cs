@@ -26,6 +26,12 @@ public sealed class UserRepositoty(ApplicationDbContext context) : Repository<Us
     );
   }
 
+  public async Task<bool> ExistsUser(string username, string email, CancellationToken cancellationToken)
+  {
+    return await _dbSet.AnyAsync(u => u.Email == email && u.Username == username, cancellationToken);
+  }
+
+
   public async Task<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken)
   {
     return await _dbSet.AsNoTracking().FirstOrDefaultAsync(

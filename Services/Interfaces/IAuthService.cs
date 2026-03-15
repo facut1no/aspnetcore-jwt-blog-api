@@ -1,14 +1,15 @@
+using PostCommentAPI.Common.Result;
 using PostCommentAPI.Dtos.Auth;
 
 namespace PostCommentAPI.Services;
 
 public interface IAuhtService
 {
-  Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request);
+  Task<Result<AuthResponseDto>> RegisterAsync(RegisterRequestDto request, CancellationToken cancellationToken);
 
-  Task<AuthResponseDto> LoginAsync(LoginRequestDto request);
+  Task<Result<AuthResponseDto>> LoginAsync(LoginRequestDto request, CancellationToken cancellationToken);
 
-  Task<AuthResponseDto> RefreshTokenAsync(string refreshToken);
+  Task<Result<AuthResponseDto>> RefreshTokenAsync(string refreshToken);
 
   Task LogoutAsync(Guid userId);
 }
