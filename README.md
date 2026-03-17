@@ -31,6 +31,3 @@
 ## Estado del Proyecto
 
 Este proyecto está en fase de desarrollo. Los endpoints y funcionalidades pueden no estar completamente implementados o probados.
-
-## Licencia
-MIT
