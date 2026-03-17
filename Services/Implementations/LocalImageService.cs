@@ -5,6 +5,17 @@ namespace PostCommentAPI.Services;
 public sealed class LocalImageService : IIMageService
 {
   private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
+
+  public async Task DeleteImageAsync(string imageUrl)
+  {
+    if (string.IsNullOrEmpty(imageUrl))
+      return;
+
+    var filePath = Path.Combine("wwwroot", imageUrl.TrimStart('/'));
+    if (File.Exists(filePath))
+      File.Delete(filePath);
+  }
+
   public async Task<Result<string>> SaveImageAsync(IFormFile file, CancellationToken cancellationToken)
   {
     if (file is null)

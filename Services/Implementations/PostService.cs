@@ -1,4 +1,3 @@
-using System.Reflection;
 using PostCommentAPI.Common.Result;
 using PostCommentAPI.Dtos;
 using PostCommentAPI.Models;
@@ -33,16 +32,7 @@ public sealed class PostsService(IPostRepository postRepository, IIMageService i
 
     await _postRepository.SaveChangeAsync(cancellationToken);
 
-    var postResponse = new ResponsePostDto
-    {
-      Id = postDb.Id,
-      Title = postDb.Title,
-      Content = postDb.Content,
-      CreateAt = postDb.CreatedAt,
-      ImageUrl = postDb.ImageUrl,
-      UpdateAt = postDb.UpdatedAt,
-      UserId = postDb.UserId,
-    };
+    var postResponse = ToDto(postDb);
 
     return Result<ResponsePostDto>.Success(postResponse);
   }
@@ -51,16 +41,7 @@ public sealed class PostsService(IPostRepository postRepository, IIMageService i
   {
     var posts = await _postRepository.GetByUserIdAsync(userId, cancellationToken);
 
-    var postDtos = posts.Select(p => new ResponsePostDto
-    {
-      Id = p.Id,
-      Title = p.Title,
-      Content = p.Content,
-      CreateAt = p.CreatedAt,
-      ImageUrl = p.ImageUrl,
-      UpdateAt = p.UpdatedAt,
-      UserId = p.UserId,
-    });
+    var postDtos = posts.Select(p => ToDto(p));
 
     return Result<IEnumerable<ResponsePostDto>>.Success(postDtos);
   }
@@ -71,16 +52,7 @@ public sealed class PostsService(IPostRepository postRepository, IIMageService i
     if (post is null)
       return Result<ResponsePostDto>.Failure("Not Found.");
 
-    var postResponse = new ResponsePostDto
-    {
-      Id = post.Id,
-      Title = post.Title,
-      Content = post.Content,
-      ImageUrl = post.ImageUrl,
-      CreateAt = post.CreatedAt,
-      UpdateAt = post.UpdatedAt,
-      UserId = post.UserId
-    };
+    var postResponse = ToDto(post);
 
     return Result<ResponsePostDto>.Success(postResponse);
   }
@@ -99,30 +71,33 @@ public sealed class PostsService(IPostRepository postRepository, IIMageService i
 
     if (dto.ImageFile is not null)
     {
-      if (File.Exists(post.ImageUrl))
-        File.Delete(post.ImageUrl);
-      else
-      {
-        var result = await _imageService.SaveImageAsync(dto.ImageFile, cancellationToken);
-        if (!result.IsSuccess)
-          return Result<ResponsePostDto>.Failure(result.Error);
+      var result = await _imageService.SaveImageAsync(dto.ImageFile, cancellationToken);
+      if (!result.IsSuccess)
+        return Result<ResponsePostDto>.Failure(result.Error);
 
-        post.ImageUrl = result.Value!;
-      }
+      if (!string.IsNullOrEmpty(post.ImageUrl))
+        await _imageService.DeleteImageAsync(post.ImageUrl);
+
+      post.ImageUrl = result.Value!;
     }
 
     await _postRepository.SaveChangeAsync(cancellationToken);
 
-    var postResponse = new ResponsePostDto
-    {
-      Id = post.Id,
-      Title = post.Title,
-      Content = post.Content,
-      ImageUrl = post.ImageUrl,
-      CreateAt = post.CreatedAt,
-      UpdateAt = post.UpdatedAt,
-      UserId = post.UserId,
-    };
+    var postResponse = ToDto(post);
+
     return Result<ResponsePostDto>.Success(postResponse);
   }
+
+
+
+  private static ResponsePostDto ToDto(Post post) => new()
+  {
+    Id = post.Id,
+    Title = post.Title,
+    Content = post.Content,
+    ImageUrl = post.ImageUrl,
+    CreateAt = post.CreatedAt,
+    UpdateAt = post.UpdatedAt,
+    UserId = post.UserId,
+  };
 }
