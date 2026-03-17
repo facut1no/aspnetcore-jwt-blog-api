@@ -8,9 +8,10 @@ public class Repository<T>(ApplicationDbContext context) : IRepository<T> where 
 {
   private readonly ApplicationDbContext _context = context;
   protected readonly DbSet<T> _dbSet = context.Set<T>();
-  public async Task AddAsync(T entity, CancellationToken cancellationToken)
+  public async Task<T?> AddAsync(T entity, CancellationToken cancellationToken)
   {
-    await _dbSet.AddAsync(entity, cancellationToken);
+    var entityDb = await _dbSet.AddAsync(entity, cancellationToken);
+    return entity;
   }
 
   public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

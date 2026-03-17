@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PostCommentAPI.Auth;
 using PostCommentAPI.Data;
+using PostCommentAPI.Repositories;
 using PostCommentAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IAuhtService, AuhtService>();
 builder.Services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IAuhtService, AuhtService>();
+builder.Services.AddScoped<ICommentRepository, CommentRepositoy>();
+builder.Services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
+builder.Services.AddScoped<IPostLikeRepository, PostLikeRepository>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {

@@ -8,5 +8,5 @@ public sealed class ResponsePostDto
   public string? ImageUrl { get; set; } = null!;
   public DateTime CreateAt { get; set; }
   public DateTime UpdateAt { get; set; }
-  public string UserId { get; set; } = string.Empty;
+  public Guid UserId { get; set; }
 }

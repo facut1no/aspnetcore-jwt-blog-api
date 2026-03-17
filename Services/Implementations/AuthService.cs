@@ -54,19 +54,24 @@ public sealed class AuhtService(IPasswordHasher passwordHasher, IUserRepository 
       PasswordHash = _passwordHasher.HashPassword(request.Password)
     };
 
+    var userDb = await _userRepository.AddAsync(user, cancellationToken);
+
+    if (userDb is null)
+      return Result<AuthResponseDto>.Failure("Database Error");
+
     var userResponse = new UserDto
     {
-      Id = user.Id,
-      Username = user.Username,
-      FirstName = user.FirstName,
-      LastName = user.LastName,
-      Email = user.Email
+      Id = userDb.Id,
+      Username = userDb.Username,
+      FirstName = userDb.FirstName,
+      LastName = userDb.LastName,
+      Email = userDb.Email
     };
 
-    var token = _tokenProvider.Create(user);
+    var token = _tokenProvider.Create(userDb);
 
-    await _userRepository.AddAsync(user, cancellationToken);
     await _userRepository.SaveChangeAsync(cancellationToken);
+
     return Result<AuthResponseDto>.Success(new AuthResponseDto
     {
       AccessToken = token,
@@ -81,6 +86,7 @@ public sealed class AuhtService(IPasswordHasher passwordHasher, IUserRepository 
 
   public Task<Result<AuthResponseDto>> RefreshTokenAsync(string refreshToken)
   {
+
     throw new NotImplementedException();
   }
 
