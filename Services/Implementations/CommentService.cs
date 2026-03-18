@@ -32,18 +32,51 @@ public sealed class CommentService(ICommentRepository commentRepository) : IComm
 
   }
 
-  public Task<Result<CommentResponseDto>> GetCommentById(Guid commentId, CancellationToken cancellationToken)
+  public async Task<Result<CommentResponseDto>> GetCommentById(Guid commentId, CancellationToken cancellationToken)
   {
-    throw new NotImplementedException();
+      var post = await _commentRepository.GetByIdAsync(commentId, cancellationToken);
+      if (post is null)
+        return Result<CommentResponseDto>.Failure("Not found");
+
+      var commentResponse = new CommentResponseDto
+      {
+        Id = post.Id,
+        Content = post.Content,
+      };
+      
+      return Result<CommentResponseDto>.Success(commentResponse);
   }
 
-  public Task<Result<IEnumerable<CommentResponseDto>>> GetCommentByUserId(Guid userId, CancellationToken cancellationToken)
+  public async Task<Result<IEnumerable<CommentResponseDto>>> GetCommentByUserId(Guid userId, CancellationToken cancellationToken)
   {
-    throw new NotImplementedException();
+    var comments = await _commentRepository.GetByUserId(userId, cancellationToken);
+    var commentResponseDtos = comments.Select(c => new CommentResponseDto
+      {
+        Id = c.Id,
+        Content = c.Content,
+      }
+    );
+      
+    return Result<IEnumerable<CommentResponseDto>>.Success(commentResponseDtos);
   }
 
-  public Task<Result<CommentResponseDto>> UpdateAsync(Guid id, CommentUpdateDto dto, CancellationToken cancellationToken)
+  public async Task<Result<CommentResponseDto>> UpdateAsync(Guid id, CommentUpdateDto dto, CancellationToken cancellationToken)
   {
-    throw new NotImplementedException();
+    var comment = await _commentRepository.GetByIdAsync(id, cancellationToken);
+    if(comment is null)
+        return Result<CommentResponseDto>.Failure("Not Found");
+    
+    if(dto.Content is not null)
+        comment.Content = dto.Content;
+    
+    await _commentRepository.SaveChangeAsync(cancellationToken);
+
+    var response = new CommentResponseDto
+    {
+      Id = comment.Id,
+      Content = comment.Content,
+    };
+    
+    return Result<CommentResponseDto>.Success(response);
   }
 }
