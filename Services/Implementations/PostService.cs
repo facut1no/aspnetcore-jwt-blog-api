@@ -88,8 +88,6 @@ public sealed class PostsService(IPostRepository postRepository, IIMageService i
     return Result<ResponsePostDto>.Success(postResponse);
   }
 
-
-
   private static ResponsePostDto ToDto(Post post) => new()
   {
     Id = post.Id,
