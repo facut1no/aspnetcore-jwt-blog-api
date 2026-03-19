@@ -47,6 +47,17 @@ public sealed class CommentService(ICommentRepository commentRepository) : IComm
       return Result<CommentResponseDto>.Success(commentResponse);
   }
 
+  public async Task<Result<IEnumerable<CommentResponseDto>>> GetCommentByPostId(Guid postId, CancellationToken cancellationToken)
+  {
+    var comments = await _commentRepository.GetRootCommentsByPostId(postId, cancellationToken);
+    var commentsResponse = comments.Select(c => new CommentResponseDto
+    {
+      Id = c.Id,
+      Content = c.Content,
+    });
+    return Result<IEnumerable<CommentResponseDto>>.Success(commentsResponse);
+  }
+
   public async Task<Result<IEnumerable<CommentResponseDto>>> GetCommentByUserId(Guid userId, CancellationToken cancellationToken)
   {
     var comments = await _commentRepository.GetByUserId(userId, cancellationToken);
@@ -58,6 +69,19 @@ public sealed class CommentService(ICommentRepository commentRepository) : IComm
     );
       
     return Result<IEnumerable<CommentResponseDto>>.Success(commentResponseDtos);
+  }
+
+  public async Task<Result<CommentResponseDto>> DeleteCommentById(Guid commentId, CancellationToken cancellationToken)
+  {
+    var comment = await _commentRepository.GetByIdAsync(commentId, cancellationToken);
+    if (comment is null)
+      return Result<CommentResponseDto>.Failure("Not found");
+    _commentRepository.SoftDelete(comment);
+    return Result<CommentResponseDto>.Success(new CommentResponseDto
+    {
+      Id = comment.Id,
+      Content = comment.Content,
+    });
   }
 
   public async Task<Result<CommentResponseDto>> UpdateAsync(Guid id, CommentUpdateDto dto, CancellationToken cancellationToken)
