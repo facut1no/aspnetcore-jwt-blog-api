@@ -1,9 +1,5 @@
 # PostCommentAPI
 
-![Diagrama MER](Docs/MER.svg)
-
-![Diagrama MR](Docs/MR.png)
-
 **Proyecto en desarrollo** - API RESTful en proceso de creación en C# para gestionar publicaciones y comentarios. Actualmente no está completamente funcional.
 
 ## Características (Planeadas)
